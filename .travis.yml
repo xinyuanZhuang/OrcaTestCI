@@ -1,0 +1,21 @@
+language: csharp
+mono: none
+dotnet: 5.0.102
+solution: Orca.sln
+script:
+  - dotnet restore 
+  - dotnet build
+  - dotnet test
+
+services:
+  - mysql
+  
+env:
+  global:
+    - DATABASE_NAME=orca_db
+    - DATABASE_URL=mysql://Orca@192.168.56.1/$DATABASE_NAME
+
+before_install:
+  - mysql -u root -e 'CREATE DATABASE IF NOT EXISTS $DATABASE_NAME;' 
+  - mysql -u root $DATABASE_NAME < Orca/Database/OrcaDatabase_V2.sql
+  
